@@ -1,14 +1,20 @@
+const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
-const webpack = require('webpack');
 
-
-module.exports = {
+const config = {
     entry: {
         app: './assets/js/script.js',
         events: './assets/js/events.js',
         schedule: './assets/js/schedule.js',
         tickets: './assets/js/tickets.js'
+    },
+    devServer: {
+        static: {
+          directory: path.join(__dirname, './'),
+        },
+        compress: true,
+        port: 8080,
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -17,17 +23,17 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.jpg$/i,
+                test: /\.(png|jpe?g|gif)$/i,
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
                             esModule: false,
                             name (file) {
-                                return "[path][name].[ext]"
+                                return '[path][name].[ext]';
                             },
-                            publicPath: function(url) {
-                                return url.replace('../', '/assets/')
+                            publicPath(url) {
+                                return url.replace('../', '/assets/');
                             }
                         }
                     },
@@ -40,8 +46,8 @@ module.exports = {
     },
     plugins: [
         new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery"
+            $: 'jquery',
+            jQuery: 'jquery'
         }),
         new BundleAnalyzerPlugin({
             analyzerMode: 'static', // the report outputs to an HTML file in the dist folder
@@ -49,3 +55,5 @@ module.exports = {
     ],
     mode: 'development'
 };
+
+module.exports = config;
